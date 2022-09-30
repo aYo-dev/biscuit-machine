@@ -1,7 +1,7 @@
 import { BiscuitStates } from "../enums";
 
 export interface IBiscuit {
-  id: number,
+  id: string,
   stamp: string,
   state: BiscuitStates,
 }

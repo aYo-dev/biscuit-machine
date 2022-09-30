@@ -1,19 +1,29 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { useInterval } from "usehooks-ts";
 
-type test = Dispatch<SetStateAction<boolean>>;
+interface IUseMotorReturnValue {
+  setMotorState: (v: boolean) => void,
+  motorState: boolean,
+  pulse: number,
+}
 
-export function useMotor (): [test, number] {
-  const [motorState, toogle] = useState(false);
+export function useMotor (): IUseMotorReturnValue {
+  const [motorState, setMotorState] = useState(false);
   const [pulse, setPulse] = useState(0);
 
   useInterval(
     () => {
-      setPulse(Date.now());
+      motorState && setPulse(Date.now());
     },
 
     motorState ? 1000 : null,
   );
 
-  return [toogle, pulse];
+  const test = {
+    pulse,
+    motorState,
+    setMotorState : (v: boolean) => setMotorState(v),
+  }
+
+  return test;
 };

@@ -1,6 +1,7 @@
 import { List, ListItem, ListItemIcon, ListItemText, ListSubheader, Paper, Typography } from "@mui/material";
 import { cond, equals } from "ramda";
 import styled from 'styled-components';
+import { nanoid } from 'nanoid'
 
 import DoughIcon from '@mui/icons-material/Downloading';
 import StampIcon from '@mui/icons-material/Approval';
@@ -45,10 +46,10 @@ export const BiscuitList = ({biscuits, title}: IConveyorProps) => {
       <Typography variant="h4" component="h2">{title}</Typography>
     }>
       {biscuits.map((el) => 
-        <StyledListItem key={el.id} alignItems="flex-start">
+        <StyledListItem key={nanoid()} alignItems="flex-start">
           <ListItemText
-            primary={`${el.stamp} - ${el.id}`}
-            secondary={el.stamp || '...'}
+            primary={el.stamp || '...'}
+            secondary={`Created at: ${el.id}`}
           />
           <ListItemIcon>
             {getIcon(el.state)}

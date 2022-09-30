@@ -1,24 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useMemo, useState } from 'react';
 import './App.css';
+import { Alert, Container, Fade, TextField, Typography } from '@mui/material';
+import { isEmpty } from 'ramda';
 
 function App() {
+  const [brand, setBrand] = useState('');
+  const showAlert = useMemo(() => isEmpty(brand), [brand]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Container maxWidth="md">
+        <Typography variant="h2" component="h1">Cookie factory</Typography>
+        <TextField label="Brand" variant="outlined" onChange={(el) => setBrand(el.target.value)}/>
+        {/* {isEmpty(brand) && 
+          <Fade in={showAlert} timeout={1000}>
+            <Alert severity="info">Please enter a brand name to continue!</Alert>
+          </Fade>} */}
+      </Container>
     </div>
   );
 }

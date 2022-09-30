@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import './App.css';
+import { BiscuiteMachine } from './components/BiscuiteMachine';
 import { Alert, Container, Fade, TextField, Typography } from '@mui/material';
 import { isEmpty } from 'ramda';
 
@@ -16,6 +17,7 @@ function App() {
           <Fade in={showAlert} timeout={1000}>
             <Alert severity="info">Please enter a brand name to continue!</Alert>
           </Fade>} */}
+        <BiscuiteMachine brand={brand} />
       </Container>
     </div>
   );

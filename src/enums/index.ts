@@ -4,7 +4,7 @@ export enum MachineStates {
     pause = 'pause',
   };
   
-export enum BisquiteStates {
+export enum BiscuitStates {
   raw = 'raw',
   stamped = 'stamped',
   bake = 'bake',

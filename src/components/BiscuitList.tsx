@@ -7,11 +7,11 @@ import StampIcon from '@mui/icons-material/Approval';
 import BakeIcon from '@mui/icons-material/Fireplace';
 import BakedIcon from '@mui/icons-material/CheckCircleOutline';
 
-import { BisquiteStates } from "../enums";
-import { IBisquite } from "../interfaces";
+import { BiscuitStates } from "../enums";
+import { IBiscuit } from "../interfaces";
 
 interface IConveyorProps {
-  bisquites: IBisquite[],
+  biscuits: IBiscuit[],
   title: string,
 }
 
@@ -31,12 +31,12 @@ const StyledPaper = styled(Paper)`
   width: 50%;
 `;
 
-export const BisquitList = ({bisquites, title}: IConveyorProps) => {
+export const BiscuitList = ({biscuits, title}: IConveyorProps) => {
   const getIcon = cond([
-    [equals(BisquiteStates.raw),  () => <DoughIcon />],
-    [equals(BisquiteStates.stamped), () => <StampIcon />],
-    [equals(BisquiteStates.bake), () => <BakeIcon />],
-    [equals(BisquiteStates.baked), () => <BakedIcon />],
+    [equals(BiscuitStates.raw),  () => <DoughIcon />],
+    [equals(BiscuitStates.stamped), () => <StampIcon />],
+    [equals(BiscuitStates.bake), () => <BakeIcon />],
+    [equals(BiscuitStates.baked), () => <BakedIcon />],
   ]);
 
   return (
@@ -44,7 +44,7 @@ export const BisquitList = ({bisquites, title}: IConveyorProps) => {
     <StyledList subheader={
       <Typography variant="h4" component="h2">{title}</Typography>
     }>
-      {bisquites.map((el) => 
+      {biscuits.map((el) => 
         <StyledListItem key={el.id} alignItems="flex-start">
           <ListItemText
             primary={`${el.stamp} - ${el.id}`}

@@ -3,10 +3,10 @@ import { Stack } from "@mui/system";
 import { cond, equals, isEmpty } from "ramda";
 import { useEffect, useState } from "react";
 
-import { BisquiteStates, MachineStates } from "../enums";
+import { BiscuitStates, MachineStates } from "../enums";
 import { useMotor } from "../hooks/use-motor";
-import { IBisquite } from "../interfaces";
-import { BisquitList } from "./BisquitList";
+import { IBiscuit } from "../interfaces";
+import { BiscuitList } from "./BiscuitList";
 import ThermostatIcon from '@mui/icons-material/DeviceThermostat';
 import { TryCatch, Either } from 'lambda-ts';
 
@@ -19,21 +19,21 @@ interface BiscuitMachineProps{
   brand: string,
 }
 
-export const BiscuiteMachine = (props: BiscuitMachineProps) => {
+export const BiscuitMachine = (props: BiscuitMachineProps) => {
   const [machineState, switchMachine] = useState(MachineStates.off);
   const [temperature, setTemperature] = useState(0);
   const [setMotorState, pulse] = useMotor();
 
-  const [bisquitesForConvey, addBisquiteForConvey] = useState([] as IBisquite[]);
-  const [basket, addToBasket] = useState([] as IBisquite[]);
-  const [raw, addRaw] = useState({} as IBisquite);
-  const [stamped, addStamped] = useState({} as IBisquite);
-  const [inOven, putInOven] = useState({} as IBisquite);
+  const [biscuitsForConvey, addBiscuitsForConvey] = useState([] as IBiscuit[]);
+  const [basket, addToBasket] = useState([] as IBiscuit[]);
+  const [raw, addRaw] = useState({} as IBiscuit);
+  const [stamped, addStamped] = useState({} as IBiscuit);
+  const [inOven, putInOven] = useState({} as IBiscuit);
 
-  const extrude = (id: number) => ({id, stamp: '', state: BisquiteStates.raw});
-  const stamp = (bisquite: IBisquite) => ({...bisquite, stamp: props.brand, state: BisquiteStates.stamped});
-  const bake = (bisquite: IBisquite) => ({...bisquite, state: BisquiteStates.bake});
-  const done = (bisquite: IBisquite) => ({...bisquite, state: BisquiteStates.baked});
+  const extrude = (id: number) => ({id, stamp: '', state: BiscuitStates.raw});
+  const stamp = (biscuite: IBiscuit) => ({...biscuite, stamp: props.brand, state: BiscuitStates.stamped});
+  const bake = (biscuite: IBiscuit) => ({...biscuite, state: BiscuitStates.bake});
+  const done = (biscuite: IBiscuit) => ({...biscuite, state: BiscuitStates.baked});
 
   const start = () => {
     switchMachine(MachineStates.on);
@@ -65,20 +65,20 @@ export const BiscuiteMachine = (props: BiscuitMachineProps) => {
     [equals(240),  () => 'error'],
   ]);
 
-  const getBisquiteSafer = (el: IBisquite): IBisquite[] => Either(!isEmpty(el))
-    // this will happens only if bisquite is not empty
+  const getBiscuitSafer = (el: IBiscuit): IBiscuit[] => Either(!isEmpty(el))
+    // this will happens only if biscuite is not empty
     .map(_ => [el])
-    // finaly we take the bisquite wraped on bisquite or empty array 
-    .fold(_ => [], v => v) as IBisquite[];
+    // finaly we take the biscuite wraped on biscuite or empty array 
+    .fold(_ => [], v => v) as IBiscuit[];
 
   const updateConveyorBelt = (): void => {
-    const updatedList = TryCatch(() => getBisquiteSafer(raw))
-      .map(el => [...el, ...getBisquiteSafer(stamped)])
-      .map(el => [...el, ...getBisquiteSafer(inOven)])
+    const updatedList = TryCatch(() => getBiscuitSafer(raw))
+      .map(el => [...el, ...getBiscuitSafer(stamped)])
+      .map(el => [...el, ...getBiscuitSafer(inOven)])
       .get();
 
     // update convey belt
-    addBisquiteForConvey(updatedList);
+    addBiscuitsForConvey(updatedList);
   }
 
   useEffect(() => {
@@ -110,10 +110,10 @@ export const BiscuiteMachine = (props: BiscuitMachineProps) => {
         <Button variant="contained" onClick={stop}>Off</Button>
         <Chip icon={<ThermostatIcon />} label={temperature} color={getTermostatColor(temperature) as any}/>
       </Stack>
-      {!bisquitesForConvey && <p>It looks like the belt is empty...</p>}
+      {!biscuitsForConvey && <p>It looks like the belt is empty...</p>}
       <Stack direction='row' spacing={3}>
-        {bisquitesForConvey && <BisquitList title="Conveyor belt" bisquites={bisquitesForConvey}/>}
-        {basket && <BisquitList title="Basket" bisquites={basket}/>}
+        {biscuitsForConvey && <BiscuitList title="Conveyor belt" biscuits={biscuitsForConvey}/>}
+        {basket && <BiscuitList title="Basket" biscuits={basket}/>}
       </Stack>
     </Box>
   </>);

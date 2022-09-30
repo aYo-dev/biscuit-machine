@@ -1,7 +1,7 @@
-import { BisquiteStates } from "../enums";
+import { BiscuitStates } from "../enums";
 
-export interface IBisquite {
+export interface IBiscuit {
   id: number,
   stamp: string,
-  state: BisquiteStates,
+  state: BiscuitStates,
 }

@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemIcon, ListItemText, ListSubheader, Paper, Typography } from "@mui/material";
+import { List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
 import { cond, equals } from "ramda";
 import styled from 'styled-components';
 import { nanoid } from 'nanoid'

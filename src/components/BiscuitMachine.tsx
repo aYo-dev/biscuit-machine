@@ -92,11 +92,9 @@ export const BiscuitMachine = (props: BiscuitMachineProps) => {
   // and all cookies on the belt must be baked
   const handlePulseWhenMachineIsTurnedOff = () => {
     // if there is cookie in the oven it must be moved in the basked 
-    // and oven should be turn off
     if(!isEmpty(inOven)) {
       addToBasket((prev) => [done(inOven), ...prev]);
       putInOven({} as IBiscuit);
-      setTemperature(0);
     }
 
     // if there is stmped cookie it must be put in oven and 
@@ -131,14 +129,15 @@ export const BiscuitMachine = (props: BiscuitMachineProps) => {
     updateConveyorBelt();
   }, [raw, stamped, inOven]);
 
+   //This hook is responsible to turn off the oven and motor
   useEffect(() => {
     if(!isOff(machineState)) return;
     if(!isEmpty(biscuitsForConvey)) return;
 
+    setTemperature(0);
     // motor should stop only when conveyor belt is empty
     setMotorState(false);
   }, [biscuitsForConvey, machineState]);
-
 
 
   return (<>

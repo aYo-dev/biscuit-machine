@@ -1,25 +1,23 @@
-import { Box, Button, Chip } from "@mui/material";
-import { Stack } from "@mui/system";
-import { cond, equals, isEmpty } from "ramda";
 import { useEffect, useState } from "react";
+import { isEmpty } from "ramda";
 import { TryCatch, Either } from 'lambda-ts';
-import ThermostatIcon from '@mui/icons-material/DeviceThermostat';
+
+import { Box, Button } from "@mui/material";
+import { Stack } from "@mui/system";
 
 import { BiscuitStates, MachineStates } from "../enums";
 import { useMotor } from "../hooks/use-motor";
 import { IBiscuit } from "../interfaces";
 import { BiscuitList } from "./BiscuitList";
-
-
-const isOn = equals(MachineStates.on);
-const isOff = equals(MachineStates.off);
-const isPause = equals(MachineStates.pause);
+import { isOff, isOn, isPause } from "../utils";
+import { Legend } from "./Legend";
 
 interface BiscuitMachineProps{
   brand: string,
+  canStart: boolean,
 }
 
-export const BiscuitMachine = (props: BiscuitMachineProps) => {
+export const BiscuitMachine = ({canStart, brand}: BiscuitMachineProps) => {
   const [machineState, switchMachine] = useState(MachineStates.off);
   const [temperature, setTemperature] = useState(0);
   const {pulse, motorState, setMotorState} = useMotor();
@@ -32,7 +30,7 @@ export const BiscuitMachine = (props: BiscuitMachineProps) => {
   const [inOven, putInOven] = useState({} as IBiscuit);
 
   const extrude = (id: string) => ({id, stamp: '', state: BiscuitStates.raw});
-  const stamp = (biscuite: IBiscuit) => ({...biscuite, stamp: props.brand, state: BiscuitStates.stamped});
+  const stamp = (biscuite: IBiscuit) => ({...biscuite, stamp: brand, state: BiscuitStates.stamped});
   const bake = (biscuite: IBiscuit) => ({...biscuite, state: BiscuitStates.bake});
   const done = (biscuite: IBiscuit) => ({...biscuite, state: BiscuitStates.baked});
 
@@ -55,11 +53,6 @@ export const BiscuitMachine = (props: BiscuitMachineProps) => {
       setTemperature(240);
     }
   }, [machineState]);
-
-  const getTermostatColor = cond([
-    [equals(0),  () => 'primary'],
-    [equals(240),  () => 'error'],
-  ]);
 
   const getBiscuitSafer = (el: IBiscuit): IBiscuit[] => Either(!isEmpty(el))
     // this will happens only if biscuite is not empty
@@ -142,14 +135,14 @@ export const BiscuitMachine = (props: BiscuitMachineProps) => {
 
   return (<>
     <Box display="flex" alignItems='center' flexDirection="column">
+      <Legend motorState={motorState} temperature={temperature} machineState={machineState} />
       <Stack direction="row" spacing={2} padding={2}>
-        <Button variant="contained" onClick={start} disabled={isOn(machineState)}>On</Button>
+        <Button variant="contained" disabled={!canStart || isOn(machineState)} onClick={start}>On</Button>
         <Button variant="contained" disabled={isOff(machineState) || isPause(machineState)} onClick={pause}>Pause</Button>
         <Button variant="contained" disabled={isOff(machineState) || isPause(machineState)} onClick={stop}>Off</Button>
-        <Chip icon={<ThermostatIcon />} label={temperature} color={getTermostatColor(temperature) as any}/>
       </Stack>
       {!biscuitsForConvey && <p>It looks like the belt is empty...</p>}
-      <Stack direction='row' spacing={3}>
+      <Stack direction='row' spacing={3} width="100%">
         {biscuitsForConvey && <BiscuitList title="Conveyor belt" biscuits={biscuitsForConvey}/>}
         {basket && <BiscuitList title="Basket" biscuits={basket}/>}
       </Stack>

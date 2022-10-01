@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import './App.css';
 import { BiscuitMachine } from './components/BiscuitMachine';
-import { Alert, Container, Fade, TextField, Typography } from '@mui/material';
+import { Alert, Box, Container, Fade, TextField, Typography } from '@mui/material';
 import { isEmpty } from 'ramda';
 
 function App() {
@@ -13,10 +13,11 @@ function App() {
       <Container maxWidth="md">
         <Typography variant="h2" component="h1">Cookie factory</Typography>
         <TextField label="Brand" variant="outlined" onChange={(el) => setBrand(el.target.value)}/>
-        {/* {isEmpty(brand) && 
-          <Fade in={showAlert} timeout={1000}>
+        <Fade in={showAlert} timeout={1000}>
+          <Box padding={3}>
             <Alert severity="info">Please enter a brand name to continue!</Alert>
-          </Fade>} */}
+          </Box>
+        </Fade>
         <BiscuitMachine brand={brand} />
       </Container>
     </div>

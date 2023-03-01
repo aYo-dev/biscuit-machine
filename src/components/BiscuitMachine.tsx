@@ -132,7 +132,6 @@ export const BiscuitMachine = ({canStart, brand}: BiscuitMachineProps) => {
     setMotorState(false);
   }, [biscuitsForConvey, machineState]);
 
-
   return (<>
     <Box display="flex" alignItems='center' flexDirection="column">
       <Legend motorState={motorState} temperature={temperature} machineState={machineState} />
@@ -143,8 +142,8 @@ export const BiscuitMachine = ({canStart, brand}: BiscuitMachineProps) => {
       </Stack>
       {!biscuitsForConvey && <p>It looks like the belt is empty...</p>}
       <Stack direction='row' spacing={3} width="100%">
-        {biscuitsForConvey && <BiscuitList title="Conveyor belt" biscuits={biscuitsForConvey}/>}
-        {basket && <BiscuitList title="Basket" biscuits={basket}/>}
+        {biscuitsForConvey && <BiscuitList title="Conveyor belt" biscuits={biscuitsForConvey} listType="belt"/>}
+        {basket && <BiscuitList title="Basket" biscuits={basket} listType="basket"/>}
       </Stack>
     </Box>
   </>);

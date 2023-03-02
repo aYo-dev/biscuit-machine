@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { isEmpty } from "ramda";
+import { ifElse, isEmpty } from "ramda";
 import { TryCatch, Either } from 'lambda-ts';
 
 import { Box, Button } from "@mui/material";
@@ -12,10 +12,20 @@ import { BiscuitList } from "./BiscuitList";
 import { isOff, isOn, isPause } from "../utils";
 import { Legend } from "./Legend";
 
+import { BasketListHeader } from "./BasketListHeader";
+import { BeltListHeader } from "./BeltListHeader";
+
 interface BiscuitMachineProps{
   brand: string,
   canStart: boolean,
 }
+
+// TODO: change the name of the method
+const isActive = ifElse(
+  v => !!v,
+  () => 'active',
+  () => 'paused',
+);
 
 export const BiscuitMachine = ({canStart, brand}: BiscuitMachineProps) => {
   const [machineState, switchMachine] = useState(MachineStates.off);
@@ -142,8 +152,12 @@ export const BiscuitMachine = ({canStart, brand}: BiscuitMachineProps) => {
       </Stack>
       {!biscuitsForConvey && <p>It looks like the belt is empty...</p>}
       <Stack direction='row' spacing={3} width="100%">
-        {biscuitsForConvey && <BiscuitList title="Conveyor belt" biscuits={biscuitsForConvey} listType={BmListTypes.belt} active={isOn(machineState)}/>}
-        {basket && <BiscuitList title="Basket" biscuits={basket} listType={BmListTypes.basket} active={isOn(machineState)}/>}
+        {biscuitsForConvey && <BiscuitList title="Conveyor belt" biscuits={biscuitsForConvey} listType={BmListTypes.belt} active={isOn(machineState)}>
+            <BeltListHeader iconClass={isActive(isOn(machineState))}/>
+          </BiscuitList>}
+        {basket && <BiscuitList title="Basket" biscuits={basket} listType={BmListTypes.basket} active={isOn(machineState)}>
+            <BasketListHeader amount={basket.length}/>
+          </BiscuitList>}
       </Stack>
     </Box>
   </>);

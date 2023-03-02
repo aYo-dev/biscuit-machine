@@ -1,5 +1,6 @@
+import { ReactNode, useMemo } from "react";
 import { List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
-import { cond, equals, ifElse, slice } from "ramda";
+import { cond, equals, slice } from "ramda";
 import styled from 'styled-components';
 import { nanoid } from 'nanoid'
 
@@ -7,19 +8,16 @@ import DoughIcon from '@mui/icons-material/Downloading';
 import StampIcon from '@mui/icons-material/Approval';
 import BakeIcon from '@mui/icons-material/Fireplace';
 import BakedIcon from '@mui/icons-material/CheckCircleOutline';
-import PrepareIcon from '@mui/icons-material/AutoMode';
-import BasketIcon from '@mui/icons-material/ShoppingBasket';
-import CookieIcon from '@mui/icons-material/Cookie';
 
 import { BiscuitStates, BmListTypes } from "../enums";
 import { IBiscuit } from "../interfaces";
-import { useMemo } from "react";
 
 interface IConveyorProps {
   biscuits: IBiscuit[],
   title: string,
   listType: BmListTypes,
   active: boolean,
+  children: ReactNode
 }
 
 const StyledListItem = styled(ListItem)`
@@ -38,14 +36,7 @@ const StyledPaper = styled(Paper)`
   width: 50%;
 `;
 
-const isBasket = equals(BmListTypes.basket);
-const isActive = ifElse(
-  v => !!v,
-  () => 'active',
-  () => 'paused',
-);
-
-export const BiscuitList = ({biscuits, title, listType, active}: IConveyorProps) => {
+export const BiscuitList = ({biscuits, title, listType, active, children}: IConveyorProps) => {
   /**
    * return an icon based on the Bisquite state
    */
@@ -56,18 +47,8 @@ export const BiscuitList = ({biscuits, title, listType, active}: IConveyorProps)
     [equals(BiscuitStates.baked), () => <BakedIcon />],
   ]);
 
-  /**
-   * return an icon based on the List type
-   */
-  const getListIcon = cond([
-    [isBasket,  () => <BasketIcon sx={{ fontSize: 40 }}/>],
-    [equals('belt'), () => <PrepareIcon className={`prepare-icon ${isActive(active)}`} sx={{ fontSize: 40 }}/>],
-  ]);
-
   // We don't want to show the whole list cause it could get too large
-  const sized = useMemo(() => biscuits.length > 5 ? slice(0, 4, biscuits) : biscuits, [biscuits]);
-  // We want to show only the amouth of backed bisquites
-  const bakedBisquites = useMemo(() => isBasket(listType) ?  biscuits.length : '', [listType, biscuits]);
+  const sized = useMemo(() => biscuits.length > 4 ? slice(0, 4, biscuits) : biscuits, [biscuits]);
 
   return (
   <StyledPaper>
@@ -78,12 +59,7 @@ export const BiscuitList = ({biscuits, title, listType, active}: IConveyorProps)
         justifyContent: "space-around",
         padding: 1,
       }}>
-        {title}
-        {getListIcon(listType)}
-        <span>
-          {bakedBisquites}
-          <CookieIcon sx={{ fontSize: 40 }}/>
-        </span>
+        {children}
       </Typography>
     }>
       {sized.map((el) => 

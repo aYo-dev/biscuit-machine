@@ -11,14 +11,14 @@ import PrepareIcon from '@mui/icons-material/AutoMode';
 import BasketIcon from '@mui/icons-material/ShoppingBasket';
 import CookieIcon from '@mui/icons-material/Cookie';
 
-import { BiscuitStates } from "../enums";
+import { BiscuitStates, BmListTypes } from "../enums";
 import { IBiscuit } from "../interfaces";
 import { useMemo } from "react";
 
 interface IConveyorProps {
   biscuits: IBiscuit[],
   title: string,
-  listType: 'basket' | 'belt', //TODO: replace with Enum
+  listType: BmListTypes, //TODO: replace with Enum
 }
 
 const StyledListItem = styled(ListItem)`
@@ -37,7 +37,7 @@ const StyledPaper = styled(Paper)`
   width: 50%;
 `;
 
-const isBasket = equals('basket');
+const isBasket = equals(BmListTypes.basket);
 
 export const BiscuitList = ({biscuits, title, listType}: IConveyorProps) => {
   /**

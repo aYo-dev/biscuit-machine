@@ -10,3 +10,8 @@ export enum BiscuitStates {
   bake = 'bake',
   baked = 'baked',
 };
+
+export enum BmListTypes {
+  basket = 'basket',
+  belt = 'belt',
+};

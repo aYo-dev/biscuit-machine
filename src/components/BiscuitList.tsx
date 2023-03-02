@@ -1,5 +1,5 @@
 import { List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
-import { cond, equals, slice } from "ramda";
+import { cond, equals, ifElse, slice } from "ramda";
 import styled from 'styled-components';
 import { nanoid } from 'nanoid'
 
@@ -18,7 +18,8 @@ import { useMemo } from "react";
 interface IConveyorProps {
   biscuits: IBiscuit[],
   title: string,
-  listType: BmListTypes, //TODO: replace with Enum
+  listType: BmListTypes,
+  active: boolean,
 }
 
 const StyledListItem = styled(ListItem)`
@@ -38,8 +39,13 @@ const StyledPaper = styled(Paper)`
 `;
 
 const isBasket = equals(BmListTypes.basket);
+const isActive = ifElse(
+  v => !!v,
+  () => 'active',
+  () => 'paused',
+);
 
-export const BiscuitList = ({biscuits, title, listType}: IConveyorProps) => {
+export const BiscuitList = ({biscuits, title, listType, active}: IConveyorProps) => {
   /**
    * return an icon based on the Bisquite state
    */
@@ -55,17 +61,7 @@ export const BiscuitList = ({biscuits, title, listType}: IConveyorProps) => {
    */
   const getListIcon = cond([
     [isBasket,  () => <BasketIcon sx={{ fontSize: 40 }}/>],
-    [equals('belt'), () => <PrepareIcon sx={{ fontSize: 40,
-      animation: "spin 2s linear infinite",
-      "@keyframes spin": {
-        "0%": {
-          transform: "rotate(0eg)",
-        },
-        "100%": {
-          transform: "rotate(360deg)",
-        },
-      },
-    }}/>],
+    [equals('belt'), () => <PrepareIcon className={`prepare-icon ${isActive(active)}`} sx={{ fontSize: 40 }}/>],
   ]);
 
   // We don't want to show the whole list cause it could get too large

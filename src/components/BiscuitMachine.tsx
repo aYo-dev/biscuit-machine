@@ -142,8 +142,8 @@ export const BiscuitMachine = ({canStart, brand}: BiscuitMachineProps) => {
       </Stack>
       {!biscuitsForConvey && <p>It looks like the belt is empty...</p>}
       <Stack direction='row' spacing={3} width="100%">
-        {biscuitsForConvey && <BiscuitList title="Conveyor belt" biscuits={biscuitsForConvey} listType={BmListTypes.belt}/>}
-        {basket && <BiscuitList title="Basket" biscuits={basket} listType={BmListTypes.basket}/>}
+        {biscuitsForConvey && <BiscuitList title="Conveyor belt" biscuits={biscuitsForConvey} listType={BmListTypes.belt} active={isOn(machineState)}/>}
+        {basket && <BiscuitList title="Basket" biscuits={basket} listType={BmListTypes.basket} active={isOn(machineState)}/>}
       </Stack>
     </Box>
   </>);

@@ -19,11 +19,9 @@ export function useMotor (): IUseMotorReturnValue {
     motorState ? 1000 : null,
   );
 
-  const test = {
+  return {
     pulse,
     motorState,
     setMotorState : (v: boolean) => setMotorState(v),
-  }
-
-  return test;
+  };
 };

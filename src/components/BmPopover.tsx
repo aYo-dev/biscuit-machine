@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { AppBar, Popover, Typography } from "@mui/material"
+import { Popover, Typography } from "@mui/material"
 
 interface IHeaderProps {
   text: string;

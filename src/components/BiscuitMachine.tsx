@@ -6,7 +6,7 @@ import { Box, Button } from "@mui/material";
 import { Stack } from "@mui/system";
 
 import { BiscuitStates, BmListTypes, MachineStates } from "../enums";
-import { useMotor } from "../hooks/use-motor";
+import { useMotor } from "../hooks/useMotor";
 import { IBiscuit } from "../interfaces";
 import { BiscuitList } from "./BiscuitList";
 import { isOff, isOn, isPause } from "../utils";
@@ -14,6 +14,7 @@ import { Legend } from "./Legend";
 
 import { BasketListHeader } from "./BasketListHeader";
 import { BeltListHeader } from "./BeltListHeader";
+import { useThermostat } from "../hooks/useThermostat";
 
 interface BiscuitMachineProps{
   brand: string,
@@ -29,7 +30,9 @@ const isActive = ifElse(
 
 export const BiscuitMachine = ({canStart, brand}: BiscuitMachineProps) => {
   const [machineState, switchMachine] = useState(MachineStates.off);
-  const [temperature, setTemperature] = useState(0);
+  // const [temperature, setTemperature] = useState(0);
+  const [temperature, setTemperature] = useThermostat();
+  
   const {pulse, motorState, setMotorState} = useMotor();
 
   const [biscuitsForConvey, addBiscuitsForConvey] = useState([] as IBiscuit[]);
@@ -40,9 +43,9 @@ export const BiscuitMachine = ({canStart, brand}: BiscuitMachineProps) => {
   const [inOven, putInOven] = useState({} as IBiscuit);
 
   const extrude = (id: string) => ({id, stamp: '', state: BiscuitStates.raw});
-  const stamp = (biscuite: IBiscuit) => ({...biscuite, stamp: brand, state: BiscuitStates.stamped});
-  const bake = (biscuite: IBiscuit) => ({...biscuite, state: BiscuitStates.bake});
-  const done = (biscuite: IBiscuit) => ({...biscuite, state: BiscuitStates.baked});
+  const stamp = (biscuit: IBiscuit) => ({...biscuit, stamp: brand, state: BiscuitStates.stamped});
+  const bake = (biscuit: IBiscuit) => ({...biscuit, state: BiscuitStates.bake});
+  const done = (biscuit: IBiscuit) => ({...biscuit, state: BiscuitStates.baked});
 
   const start = () => {
     switchMachine(MachineStates.on);
@@ -65,9 +68,9 @@ export const BiscuitMachine = ({canStart, brand}: BiscuitMachineProps) => {
   }, [machineState]);
 
   const getBiscuitSafer = (el: IBiscuit): IBiscuit[] => Either(!isEmpty(el))
-    // this will happens only if biscuite is not empty
+    // this will happens only if biscuit is not empty
     .map(_ => [el])
-    // finaly we take the biscuite wraped on biscuite or empty array 
+    // finally we take the biscuit wrapped on biscuit or empty array 
     .fold(_ => [], v => v) as IBiscuit[];
 
   const updateConveyorBelt = (): void => {
@@ -79,7 +82,7 @@ export const BiscuitMachine = ({canStart, brand}: BiscuitMachineProps) => {
     addBiscuitsForConvey(updatedList);
   }
 
-  // when machine is on convey belt should be start the process of creation of the cookises
+  // when machine is on convey belt should be start the process of creation of the cookies
   const handlePulseWhenMachineIsTurnedOn = () => {
     // machine create raw cookie with the extruder
     addRaw(extrude(new Date().toLocaleString()));
@@ -100,7 +103,7 @@ export const BiscuitMachine = ({canStart, brand}: BiscuitMachineProps) => {
       putInOven({} as IBiscuit);
     }
 
-    // if there is stmped cookie it must be put in oven and 
+    // if there is stamped cookie it must be put in oven and 
     // then we don't need any new stemped cookie
     if (!isEmpty(stamped)) {
       putInOven(bake(stamped));

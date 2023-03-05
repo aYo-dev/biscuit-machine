@@ -37,7 +37,7 @@ export const Legend = ({
   };
 
   const isOpen = useCallback((id: symbol) =>
-    Boolean(anchorEl) && activeIdentifier === id, [activeIdentifier]);
+    Boolean(anchorEl) && activeIdentifier === id, [activeIdentifier, anchorEl]);
 
   return (
     <Stack direction="row" spacing={2} padding={2}>

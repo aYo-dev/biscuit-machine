@@ -5,7 +5,7 @@ import { TryCatch, Either } from 'lambda-ts';
 import { Box, Button } from "@mui/material";
 import { Stack } from "@mui/system";
 
-import { BiscuitStates, BmListTypes, MachineStates } from "../enums";
+import { BiscuitStates, MachineStates } from "../enums";
 import { useMotor } from "../hooks/useMotor";
 import { IBiscuit } from "../interfaces";
 import { BiscuitList } from "./BiscuitList";
@@ -155,10 +155,10 @@ export const BiscuitMachine = ({canStart, brand}: BiscuitMachineProps) => {
       </Stack>
       {!biscuitsForConvey && <p>It looks like the belt is empty...</p>}
       <Stack direction='row' spacing={3} width="100%">
-        {biscuitsForConvey && <BiscuitList title="Conveyor belt" biscuits={biscuitsForConvey} listType={BmListTypes.belt} active={isOn(machineState)}>
+        {biscuitsForConvey && <BiscuitList biscuits={biscuitsForConvey}>
             <BeltListHeader iconClass={isActive(isOn(machineState))}/>
           </BiscuitList>}
-        {basket && <BiscuitList title="Basket" biscuits={basket} listType={BmListTypes.basket} active={isOn(machineState)}>
+        {basket && <BiscuitList biscuits={basket}>
             <BasketListHeader amount={basket.length}/>
           </BiscuitList>}
       </Stack>

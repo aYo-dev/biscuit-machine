@@ -14,9 +14,6 @@ import { IBiscuit } from "../interfaces";
 
 interface IConveyorProps {
   biscuits: IBiscuit[],
-  title: string,
-  listType: BmListTypes,
-  active: boolean,
   children: ReactNode
 }
 
@@ -36,9 +33,9 @@ const StyledPaper = styled(Paper)`
   width: 50%;
 `;
 
-export const BiscuitList = ({biscuits, title, listType, active, children}: IConveyorProps) => {
+export const BiscuitList = ({biscuits, children}: IConveyorProps) => {
   /**
-   * return an icon based on the Bisquite state
+   * return an icon based on the Biscuit state
    */
   const getStateIcon = cond([
     [equals(BiscuitStates.raw),  () => <DoughIcon />],

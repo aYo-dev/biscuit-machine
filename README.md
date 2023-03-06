@@ -2,6 +2,18 @@
 
 Biscuit machine system build with [React][react] and [Typescript][typescript].
 
+## Description
+
+The application cover the following requirements:
+
+- When switched on, the machine must wait for the oven to warm up before starting the conveyor belt.
+
+- Biscuits must be cooked at a temperature of 220 - 240°C (the oven will overheat if the heating element is on all the time).
+
+- If the operator selects “Pause", all movement must be stopped immediately but the oven should be kept heated.
+
+- When “Off” is selected, the machine should be shut down leaving nothing on the conveyor belt.
+
 ## Tech Stack 
 
 * [React][react], [Typescript][typescript], [Lambda TS][lambda-ts], [Yarn][yarn]
